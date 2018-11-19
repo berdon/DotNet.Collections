@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;Test</Configurations>
+    <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    
+    <Authors>Austin Hanson</Authors>
+    <PackageId>DotNet.Collections</PackageId>
+    <Description>Mish-mash of .NET collections.</Description>
+    <PackageProjectUrl>https://github.com/berdon/DotNet.Collections</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/berdon/DotNet.Collections</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/berdon/DotNet.Collections/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|AnyCPU'">
+    <DefineConstants>TRACE;TEST</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+</Project>
