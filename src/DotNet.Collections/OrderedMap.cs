@@ -180,6 +180,21 @@ namespace DotNet.Collections
             }
         }
 
+        public bool TryRemove(K key, out V value)
+        {
+            lock (_lock)
+            {
+                value = default(V);
+                LinkedListNode<(K Key, V Value)> node;
+                bool found = _dictionary.TryGetValue(key, out node);
+                if (!found) return false;
+                value = node.Value.Value;
+                _dictionary.Remove(key);
+                _linkedList.Remove(node);
+                return true;
+            }
+        }
+
         public IEnumerator<V> GetEnumerator()
         {
             return _linkedList.Select(i => i.Value).GetEnumerator();
