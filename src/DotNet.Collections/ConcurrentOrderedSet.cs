@@ -1,24 +1,21 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace DotNet.Collections
 {
-    /// <summary>
-    /// See: https://gmamaladze.wordpress.com/2013/07/25/hashset-that-preserves-insertion-order-or-net-implementation-of-linkedhashset/
-    /// and https://stackoverflow.com/a/17861748/110762
-    /// </summary>
-    public class OrderedSet<T> : ICollection<T>
+    public class ConcurrentOrderedSet<T> : ICollection<T>
     {
         private readonly IDictionary<T, LinkedListNode<T>> _dictionary;
         private readonly LinkedList<T> _linkedList;
+        private readonly object _lock = new object();
 
-        public OrderedSet()
+        public ConcurrentOrderedSet()
             : this(EqualityComparer<T>.Default)
         {
         }
 
-        public OrderedSet(IEqualityComparer<T> comparer)
+        public ConcurrentOrderedSet(IEqualityComparer<T> comparer)
         {
             _dictionary = new Dictionary<T, LinkedListNode<T>>(comparer);
             _linkedList = new LinkedList<T>();
@@ -41,18 +38,24 @@ namespace DotNet.Collections
 
         public void Clear()
         {
-            _linkedList.Clear();
-            _dictionary.Clear();
+            lock (_lock)
+            {
+                _linkedList.Clear();
+                _dictionary.Clear();
+            }
         }
 
         public bool Remove(T item)
         {
-            LinkedListNode<T> node;
-            bool found = _dictionary.TryGetValue(item, out node);
-            if (!found) return false;
-            _dictionary.Remove(item);
-            _linkedList.Remove(node);
-            return true;
+            lock (_lock)
+            {
+                LinkedListNode<T> node;
+                bool found = _dictionary.TryGetValue(item, out node);
+                if (!found) return false;
+                _dictionary.Remove(item);
+                _linkedList.Remove(node);
+                return true;
+            }
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -77,10 +80,13 @@ namespace DotNet.Collections
 
         public bool Add(T item)
         {
-            if (_dictionary.ContainsKey(item)) return false;
-            LinkedListNode<T> node = _linkedList.AddLast(item);
-            _dictionary.Add(item, node);
-            return true;
+            lock (_lock)
+            {
+                if (_dictionary.ContainsKey(item)) return false;
+                LinkedListNode<T> node = _linkedList.AddLast(item);
+                _dictionary.Add(item, node);
+                return true;
+            }
         }
     }
 }

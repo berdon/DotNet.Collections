@@ -1,10 +1,9 @@
+using System;
+using System.Collections.Generic;
+
 namespace DotNet.Collections
 {
     // https://stackoverflow.com/questions/754233/is-it-there-any-lru-implementation-of-idictionary
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     /// <summary>
     /// A least-recently-used cache stored like a dictionary.
     /// </summary>
