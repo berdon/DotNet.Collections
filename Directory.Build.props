@@ -25,4 +25,13 @@
     <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">dev</VersionSuffix>
     <VersionSuffix Condition=" '$(VersionDateSuffix)'!='' ">$(VersionSuffix)-$(VersionDateSuffix)</VersionSuffix>
   </PropertyGroup>
+
+   <PropertyGroup>
+    <dotnet_xunit>2.3.1</dotnet_xunit>
+    <Microsoft_Extensions_DependencyInjection>2.1.1</Microsoft_Extensions_DependencyInjection>
+    <Microsoft_Extensions_Primitives>2.1.1</Microsoft_Extensions_Primitives>
+    <xunit>2.4.1</xunit>
+    <xunit_categories>2.0.4</xunit_categories>
+    <xunit_runner_visualstudio>2.3.1</xunit_runner_visualstudio>
+  </PropertyGroup>
 </Project>
