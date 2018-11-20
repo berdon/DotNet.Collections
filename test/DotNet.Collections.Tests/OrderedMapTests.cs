@@ -55,12 +55,12 @@ namespace DotNet.Collections.Tests
             var result = dict.AddOrUpdate("foo", "bar", (k, v) => "baz");
 
             Assert.Single(dict);
-            Assert.Equal(result, "bar");
+            Assert.Equal("bar", result);
 
             result = dict.AddOrUpdate("foo", "baz", (k, v) => "baz");
 
             Assert.Single(dict);
-            Assert.Equal(result, "baz");
+            Assert.Equal("baz", result);
         }
 
         [Fact]

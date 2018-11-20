@@ -3,7 +3,7 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <Configurations>Debug;Release;Test</Configurations>
     <LangVersion>latest</LangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition="'$(Configuration)'!='Test'">true</GeneratePackageOnBuild>
     
     <Authors>Austin Hanson</Authors>
     <PackageId>DotNet.Collections</PackageId>
