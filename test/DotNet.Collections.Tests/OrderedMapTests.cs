@@ -49,6 +49,50 @@ namespace DotNet.Collections.Tests
         }
 
         [Fact]
+        public void OrderedMap_Supports_AddOrUpdate()
+        {
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+            var result = dict.AddOrUpdate("foo", "bar", (k, v) => "baz");
+
+            Assert.Single(dict);
+            Assert.Equal(result, "bar");
+
+            result = dict.AddOrUpdate("foo", "baz", (k, v) => "baz");
+
+            Assert.Single(dict);
+            Assert.Equal(result, "baz");
+        }
+
+        [Fact]
+        public void OrderedMap_AddOrUpdate_UpdateCallbackNotCalledForNewItem()
+        {
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+
+            string callbackValue = null;
+            dict.AddOrUpdate("foo", "bar", (k, v) => {
+                callbackValue = v;
+                return "baz";
+            });
+
+            Assert.Null(callbackValue);
+        }
+
+        [Fact]
+        public void OrderedMap_AddOrUpdate_PassesOldValueForExistingItem()
+        {
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+            dict.AddOrUpdate("foo", "bar", (k, v) => "baz");
+
+            string callbackValue = null;
+            dict.AddOrUpdate("foo", "baz", (k, v) => {
+                callbackValue = v;
+                return "baz";
+            });
+
+            Assert.Equal("bar", callbackValue);
+        }
+
+        [Fact]
         public void OrderedMap_ContainsKey_ReturnsTrueIfKeyExists()
         {
             const string expectedKey = "foo";
