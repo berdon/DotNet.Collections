@@ -10,7 +10,7 @@ steps:
 - script: dotnet restore
   displayName: 'Restoring Packages'
 
-- script: dotnet test --logger trx
+- script: dotnet test --logger trx --configuration Test
   displayName: 'Run automated tests'
   continueOnError: true
 
