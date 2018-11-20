@@ -11,8 +11,8 @@ steps:
   displayName: 'Restoring Packages'
 
 - script: dotnet test --logger trx
-    displayName: 'Run automated tests'
-    continueOnError: true
+  displayName: 'Run automated tests'
+  continueOnError: true
 
 - task: PublishTestResults@2
   inputs:
