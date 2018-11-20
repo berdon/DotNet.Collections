@@ -1,21 +1,22 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DotNet.Collections
 {
-    public class OrderedDictionary<K, V> : IDictionary<K, V>
+    public class ConcurrentOrderedDictionary<K, V> : IDictionary<K, V>
     {
         private readonly IDictionary<K, LinkedListNode<(K Key, V Value)>> _dictionary;
         private readonly LinkedList<(K Key, V Value)> _linkedList;
+        private readonly object _lock = new object();
 
-        public OrderedDictionary()
+        public ConcurrentOrderedDictionary()
             : this(EqualityComparer<K>.Default)
         {
         }
 
-        public OrderedDictionary(IEqualityComparer<K> comparer)
+        public ConcurrentOrderedDictionary(IEqualityComparer<K> comparer)
         {
             _dictionary = new Dictionary<K, LinkedListNode<(K Key, V Value)>>(comparer);
             _linkedList = new LinkedList<(K Key, V Value)>();
@@ -37,24 +38,51 @@ namespace DotNet.Collections
 
         public V this[K key]
         {
-            get => _dictionary[key].Value.Value;
+            get
+            {
+                lock (_lock)
+                {
+                    return _dictionary[key].Value.Value;
+                }
+            }
             set => Add(key, value);
         }
 
         public void Clear()
         {
-            _linkedList.Clear();
-            _dictionary.Clear();
+            lock (_lock)
+            {
+                _linkedList.Clear();
+                _dictionary.Clear();
+            }
         }
 
         public bool Remove(K key)
         {
-            LinkedListNode<(K Key, V Value)> node;
-            bool found = _dictionary.TryGetValue(key, out node);
-            if (!found) return false;
-            _dictionary.Remove(key);
-            _linkedList.Remove(node);
-            return true;
+            lock (_lock)
+            {
+                LinkedListNode<(K Key, V Value)> node;
+                bool found = _dictionary.TryGetValue(key, out node);
+                if (!found) return false;
+                _dictionary.Remove(key);
+                _linkedList.Remove(node);
+                return true;
+            }
+        }
+
+        public bool TryRemove(K key, out V value)
+        {
+            lock (_lock)
+            {
+                value = default(V);
+                LinkedListNode<(K Key, V Value)> node;
+                bool found = _dictionary.TryGetValue(key, out node);
+                if (!found) return false;
+                value = node.Value.Value;
+                _dictionary.Remove(key);
+                _linkedList.Remove(node);
+                return true;
+            }
         }
 
         public IEnumerator<V> GetEnumerator()
@@ -74,10 +102,13 @@ namespace DotNet.Collections
 
         public bool Add(K key, V item)
         {
-            if (_dictionary.ContainsKey(key)) return false;
-            LinkedListNode<(K Key, V Value)> node = _linkedList.AddLast((key, item));
-            _dictionary.Add(key, node);
-            return true;
+            lock (_lock)
+            {
+                if (_dictionary.ContainsKey(key)) return false;
+                LinkedListNode<(K Key, V Value)> node = _linkedList.AddLast((key, item));
+                _dictionary.Add(key, node);
+                return true;
+            }
         }
 
         void IDictionary<K, V>.Add(K key, V value)
@@ -85,19 +116,28 @@ namespace DotNet.Collections
             Add(key, value);
         }
 
-        public bool ContainsKey(K key) => _dictionary.ContainsKey(key);
+        public bool ContainsKey(K key)
+        {
+            lock (_lock)
+            {
+                return _dictionary.ContainsKey(key);
+            }
+        }
 
         public bool TryGetValue(K key, out V value)
         {
-            value = default(V);
-
-            if (ContainsKey(key))
+            lock (_lock)
             {
-                value = _dictionary[key].Value.Value;
-                return true;
-            }
+                value = default(V);
 
-            return false;
+                if (ContainsKey(key))
+                {
+                    value = _dictionary[key].Value.Value;
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         public void Add(KeyValuePair<K, V> item)
@@ -105,7 +145,13 @@ namespace DotNet.Collections
             Add(item.Key, item.Value);
         }
 
-        public bool Contains(KeyValuePair<K, V> item) => _dictionary.ContainsKey(item.Key);
+        public bool Contains(KeyValuePair<K, V> item)
+        {
+            lock (_lock)
+            {
+                return _dictionary.ContainsKey(item.Key);
+            }
+        }
 
         public void CopyTo(KeyValuePair<K, V>[] array, int arrayIndex) => _linkedList.Select(i => new KeyValuePair<K, V>(i.Key, i.Value)).ToList().CopyTo(array, arrayIndex);
 

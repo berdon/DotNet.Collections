@@ -10,6 +10,16 @@ steps:
 - script: dotnet restore
   displayName: 'Restoring Packages'
 
+- script: dotnet test --logger trx
+    displayName: 'Run automated tests'
+    continueOnError: true
+
+- task: PublishTestResults@2
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
+    failOnStandardError: 'true'
+
 - script: dotnet build --configuration Debug --version-suffix $(Build.BuildNumber)
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/release')
   displayName: 'Building'
