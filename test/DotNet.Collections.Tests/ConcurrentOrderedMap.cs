@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace DotNet.Collections.Tests
@@ -138,6 +139,87 @@ namespace DotNet.Collections.Tests
         {
             var dict = new ConcurrentOrderedDictionary<string, string>();
             Assert.False(dict.TryGetValue("foo", out var value));
+        }
+
+        [Fact]
+        public void ConcurrentOrderedMap_ByDefault_OrdersKeys_ByInsertionOrder()
+        {
+            const string firstKey = "foo";
+            const string secondKey = "bar";
+
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+            dict.Add(firstKey, "bar");
+            dict.Add(secondKey, "foo");
+
+            var expectedOrder = new[] { firstKey, secondKey };
+            Assert.Equal(expectedOrder, dict.Keys);
+        }
+
+        [Fact]
+        public void ConcurrentOrderedMap_ByDefault_OrdersValues_ByInsertionOrder()
+        {
+            const string firstValue = "foo";
+            const string secondValue = "bar";
+
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+            dict.Add("foo", firstValue);
+            dict.Add("bar", secondValue);
+
+            var expectedOrder = new[] { firstValue, secondValue };
+            Assert.Equal(expectedOrder, dict.Values);
+        }
+
+        [Fact]
+        public void ConcurrentOrderedMap_ByDefault_EnumeratesValues_ByInsertionOrder()
+        {
+            const string firstValue = "foo";
+            const string secondValue = "bar";
+
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+            dict.Add("foo", firstValue);
+            dict.Add("bar", secondValue);
+
+            using (IEnumerator<string> enumerator = dict.GetEnumerator())
+            {
+                enumerator.MoveNext();
+                Assert.Equal(firstValue, enumerator.Current);
+                enumerator.MoveNext();
+                Assert.Equal(secondValue, enumerator.Current);
+            }
+        }
+
+        [Fact]
+        public void ConcurrentOrderedMap_ByDefault_CopiesTo_ByInsertionOrder()
+        {
+            IEnumerable<string> expectedValues = Enumerable.Range(0, 10).Reverse().Select(v => v.ToString());
+
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+            foreach (var val in expectedValues)
+            {
+                dict.Add(val, val);
+            }
+
+            var copiedArray = new string[10];
+            dict.CopyTo(copiedArray, 0);
+
+            Assert.Equal(expectedValues, copiedArray);
+        }
+
+        [Fact]
+        public void ConcurrentOrderedMap_ByDefault_CopiesTo_ByInsertionOrder_AndRespectsArrayIndex()
+        {
+            IEnumerable<string> expectedValues = Enumerable.Range(0, 10).Reverse().Select(v => v.ToString());
+
+            var dict = new ConcurrentOrderedDictionary<string, string>();
+            foreach (var val in expectedValues)
+            {
+                dict.Add(val, val);
+            }
+
+            var copiedArray = new string[15];
+            dict.CopyTo(copiedArray, 5);
+
+            Assert.Equal(expectedValues, copiedArray.Skip(5));
         }
     }
 }
