@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DotNet.Collections
 {
@@ -8,7 +9,7 @@ namespace DotNet.Collections
     /// See: https://gmamaladze.wordpress.com/2013/07/25/hashset-that-preserves-insertion-order-or-net-implementation-of-linkedhashset/
     /// and https://stackoverflow.com/a/17861748/110762
     /// </summary>
-    public class OrderedSet<T> : ICollection<T>
+    public class OrderedSet<T> : ICollection<T>, ISet<T>
     {
         private readonly IDictionary<T, LinkedListNode<T>> _dictionary;
         private readonly LinkedList<T> _linkedList;
@@ -82,5 +83,25 @@ namespace DotNet.Collections
             _dictionary.Add(item, node);
             return true;
         }
+
+        public void ExceptWith(IEnumerable<T> other) => throw new NotImplementedException();
+
+        public void IntersectWith(IEnumerable<T> other) => throw new NotImplementedException();
+
+        public bool IsProperSubsetOf(IEnumerable<T> other) => new HashSet<T>(_dictionary.Keys).IsProperSubsetOf(other);
+
+        public bool IsProperSupersetOf(IEnumerable<T> other) => new HashSet<T>(_dictionary.Keys).IsProperSupersetOf(other);
+
+        public bool IsSubsetOf(IEnumerable<T> other) => new HashSet<T>(_dictionary.Keys).IsSubsetOf(other);
+
+        public bool IsSupersetOf(IEnumerable<T> other) => new HashSet<T>(_dictionary.Keys).IsSupersetOf(other);
+
+        public bool Overlaps(IEnumerable<T> other) => new HashSet<T>(_dictionary.Keys).Overlaps(other);
+
+        public bool SetEquals(IEnumerable<T> other) => new HashSet<T>(_dictionary.Keys).SetEquals(other);
+
+        public void SymmetricExceptWith(IEnumerable<T> other) => throw new NotImplementedException();
+
+        public void UnionWith(IEnumerable<T> other) => throw new NotImplementedException();
     }
 }
