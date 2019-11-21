@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;Test</Configurations>
+    <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    
+    <Authors>Austin Hanson</Authors>
+    <PackageId>DotNet.Extensions.DependencyInjection</PackageId>
+    <Description>Additional extensions for .NET Core dependency injection</Description>
+    <PackageProjectUrl>https://github.com/berdon/DotNet.Collections</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/berdon/DotNet.Collections</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/berdon/DotNet.Collections/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|AnyCPU'">
+    <DefineConstants>TRACE;TEST</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1"/>
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.1.1"/>
+  </ItemGroup>
+</Project>
