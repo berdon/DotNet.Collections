@@ -8,6 +8,12 @@ namespace DotNet.Collections.Tests
     public class OrderedSetTests
     {
         [Fact]
+        public void OrderedSet_Implements_ISet()
+        {
+            Assert.True(new OrderedSet<string>() is ISet<string>);
+        }
+
+        [Fact]
         public void OrderedSet_IsEmptyWhenConstructed()
         {
             var set = new OrderedSet<string>();
