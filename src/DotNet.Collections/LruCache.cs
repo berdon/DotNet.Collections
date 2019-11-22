@@ -161,6 +161,20 @@ namespace DotNet.Collections
             }
         }
 
+        public void Remove(TKey key)
+        {
+            lock (this.cacheMap)
+            {
+                if (this.cacheMap.Count == 0) return;
+
+                if (this.cacheMap.TryGetValue(key, out var node))
+                {
+                    this.cacheMap.Remove(key);
+                    this.lruList.Remove(node);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Empties the cache.

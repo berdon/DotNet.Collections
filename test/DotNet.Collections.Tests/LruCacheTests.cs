@@ -111,7 +111,22 @@ namespace DotNet.Collections.Tests
         public void LruCache_TryGetValue_ReturnsFalseIfValueDoesNotExist()
         {
             var cache = new LruCache<string, string>(100);
-            Assert.False(cache.TryGetValue("does not exist", out var value));
+            Assert.False(cache.TryGetValue("does not exist", out var _));
+        }
+
+        [Fact]
+        public void LruCache_TryGetValue_ReturnsFalseIfKeyRemoved()
+        {
+            const string key = "foo";
+            const string expectedValue = "bar";
+
+            var cache = new LruCache<string, string>(100);
+
+            cache.Add(key, expectedValue);
+            Assert.True(cache.TryGetValue(key, out var value));
+
+            cache.Remove(key);
+            Assert.False(cache.TryGetValue("does not exist", out var _));
         }
 
         [Fact]
