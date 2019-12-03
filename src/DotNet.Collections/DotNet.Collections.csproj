@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <Configurations>Debug;Release;Test</Configurations>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild Condition="'$(Configuration)'!='Test'">true</GeneratePackageOnBuild>
     
     <Authors>Austin Hanson</Authors>
