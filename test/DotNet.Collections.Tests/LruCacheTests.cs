@@ -17,7 +17,7 @@ namespace DotNet.Collections.Tests
         {
             var cache = new LruCache<string, string>(0);
             cache.Add("foo", "bar");
-            Assert.Equal(0, cache.Count);
+            Assert.Equal(1, cache.Count);
         }
 
         [Fact]

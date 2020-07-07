@@ -19,27 +19,21 @@ namespace DotNet.Collections
         public async Task PreFixTraversal()
         {
             var tree = new SplayTree<int> { 10, 6, 3, 11 };
-            await tree.DepthFirstTraversalAsync(
-                preFix: async node => _output.WriteLine(node.Value.ToString())
-            );
+            await tree.PreFixTraversalAsync(async node => _output.WriteLine(node.Value.ToString()));
         }
 
         [Fact]
         public async Task InFixTraversal()
         {
             var tree = new SplayTree<int> { 10, 6, 3, 11 };
-            await tree.DepthFirstTraversalAsync(
-                inFix: async node => _output.WriteLine(node.Value.ToString())
-            );
+            await tree.InFixTraversalAsync(async node => _output.WriteLine(node.Value.ToString()));
         }
 
         [Fact]
         public async Task PostFixTraversal()
         {
             var tree = new SplayTree<int> { 10, 6, 3, 11 };
-            await tree.DepthFirstTraversalAsync(
-                postFix: async node => _output.WriteLine(node.Value.ToString())
-            );
+            await tree.PostFixTraversalAsync(async node => _output.WriteLine(node.Value.ToString()));
         }
 
         [Fact]

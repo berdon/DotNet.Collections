@@ -203,7 +203,7 @@ namespace DotNet.Collections
             var iter = _root;
             while(iter != null && iter.Value.CompareTo(item) != 0)
             {
-                if (iter.Value.CompareTo(item) < 0) iter = iter.Left;
+                if (iter.Value.CompareTo(item) > 0) iter = iter.Left;
                 else iter = iter.Right;
             }
 
@@ -281,6 +281,8 @@ namespace DotNet.Collections
                 nextNode.Left = node.Left;
                 nextNode.Right = node.Right;
             }
+
+            _count--;
         }
 
         private BinaryTreeNode<T> FindNextChild(BinaryTreeNode<T> node)
