@@ -16,8 +16,8 @@
 
   <!-- Versioning properties -->
   <PropertyGroup>
-    <AssemblyVersion>1.0.7.0</AssemblyVersion>
-    <VersionPrefix Condition=" '$(VersionPrefix)'=='' ">1.0.7</VersionPrefix>
+    <AssemblyVersion>1.0.8.0</AssemblyVersion>
+    <VersionPrefix Condition=" '$(VersionPrefix)'=='' ">1.0.8</VersionPrefix>
   </PropertyGroup>
 
   <!-- For Debug builds generated a date/time dependent version suffix -->
