@@ -15,14 +15,30 @@ namespace DotNet.Collections
         private readonly LinkedList<T> _linkedList;
 
         public OrderedSet()
-            : this(EqualityComparer<T>.Default)
+            : this(Enumerable.Empty<T>(), EqualityComparer<T>.Default)
         {
         }
 
+        public OrderedSet(IEnumerable<T> items)
+            : this(items, EqualityComparer<T>.Default)
+        {   
+        }
+
         public OrderedSet(IEqualityComparer<T> comparer)
+            : this(Enumerable.Empty<T>(), comparer)
         {
+        }
+
+        public OrderedSet(IEnumerable<T> items, IEqualityComparer<T> comparer)
+        {
+            items ??= Enumerable.Empty<T>();
+            comparer ??= EqualityComparer<T>.Default;
+
             _dictionary = new Dictionary<T, LinkedListNode<T>>(comparer);
             _linkedList = new LinkedList<T>();
+
+            foreach (var item in items)
+                Add(item);
         }
 
         public int Count

@@ -190,6 +190,8 @@ namespace DotNet.Collections
 
         private void RemoveFirst()
         {
+            if (this.lruList.Count == 0) return;
+
             // Remove from LRUPriority
             LinkedListNode<LruCacheItem> node = this.lruList.First;
             this.lruList.RemoveFirst();
