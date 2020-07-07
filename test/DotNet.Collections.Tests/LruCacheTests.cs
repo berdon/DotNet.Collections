@@ -13,6 +13,14 @@ namespace DotNet.Collections.Tests
     public class LruCacheTests
     {
         [Fact]
+        public void LruCache_Supports_ZeroCapacity()
+        {
+            var cache = new LruCache<string, string>(0);
+            cache.Add("foo", "bar");
+            Assert.Equal(0, cache.Count);
+        }
+
+        [Fact]
         public void LruCache_Supports_AddingValue()
         {
             var cache = new LruCache<string, string>(100);
