@@ -28,6 +28,7 @@
 
    <PropertyGroup>
     <dotnet_xunit>2.3.1</dotnet_xunit>
+    <Microsoft_CSharp>4.7.0</Microsoft_CSharp>
     <Microsoft_Extensions_DependencyInjection>2.1.1</Microsoft_Extensions_DependencyInjection>
     <Microsoft_Extensions_Primitives>2.1.1</Microsoft_Extensions_Primitives>
     <xunit>2.4.1</xunit>
